@@ -2,7 +2,7 @@ import torch
 from fastapi import APIRouter, HTTPException
 from schemas.RequestDTO import RequestDTO
 from schemas.ResponseDTO import ResponseDTO
-from tool.LanguageTool import detectLang
+from tool.LanguageTool import detect_lang, convert_type, reverse_type
 from tool.ModelTool import model, tokenizer
 
 # 导出接口
@@ -11,24 +11,23 @@ router = APIRouter()
 # 接口服务
 @router.post("/translate")
 def translate(req: RequestDTO) -> ResponseDTO:
-    src_text = req.text
-    tgt_lang = req.target_lang
-
-    # 检测输入语言类型
-    src_lang = detectLang(src_text)
+    sourceText = req.text
+    # 语言类型转化
+    targetType = convert_type(req.targetType)
+    # 检测输入语言
+    sourceType = detect_lang(sourceText)
 
     # 类型合法校验
-    if not tgt_lang or tgt_lang not in tokenizer.lang_code_to_id:
-        raise HTTPException(status_code = 400, detail = f"Unsupported target language: {tgt_lang}")
-
-    tokenizer.src_lang = src_lang
-    inputs = tokenizer(src_text, return_tensors="pt", padding=True, truncation=True)
+    if not targetType or targetType not in tokenizer.lang_code_to_id:
+        raise HTTPException(status_code = 400, detail = f"Unsupported target language: {targetType}")
 
     # 翻译内容
+    tokenizer.src_lang = sourceType
+    inputs = tokenizer(sourceText, return_tensors="pt", padding=True, truncation=True)
     with torch.no_grad():
         outputs = model.generate(
             **inputs,
-            forced_bos_token_id=tokenizer.convert_tokens_to_ids(tgt_lang),
+            forced_bos_token_id = tokenizer.convert_tokens_to_ids(targetType),
             max_length=256
         )
     # 解码输出
@@ -36,8 +35,9 @@ def translate(req: RequestDTO) -> ResponseDTO:
 
     # 返回结果
     return ResponseDTO(
-        source_type = src_lang,
-        source_text = src_text,
-        target_type = tgt_lang,
-        target_text = result
+        # 反转类型
+        sourceType = reverse_type(sourceType),
+        sourceText = sourceText,
+        targetType = req.targetType,
+        targetText = result
     )

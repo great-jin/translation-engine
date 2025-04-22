@@ -11,10 +11,28 @@ LANG_CODE_MAP = {
     'es': 'spa_Latn'
 }
 
-def detectLang(text: str):
+REVERSE_LANG_CODE_MAP = {v: k for k, v in LANG_CODE_MAP.items()}
+
+
+# 检测语法
+def detect_lang(text: str):
     try:
         detected = detect(text)
         # 类型映射
         return LANG_CODE_MAP.get(detected, 'eng_Latn')
     except Exception:
         return 'eng_Latn'
+
+# 类型转化
+def convert_type(lang_type: str) -> str:
+    try:
+        return LANG_CODE_MAP[lang_type.lower()]
+    except KeyError:
+        raise ValueError(f"Unsupported language type: {lang_type}")
+
+# 类型反转
+def reverse_type(code: str) -> str:
+    try:
+        return REVERSE_LANG_CODE_MAP[code]
+    except KeyError:
+        raise ValueError(f"Unsupported language code: {code}")
