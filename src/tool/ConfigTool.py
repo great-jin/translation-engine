@@ -7,7 +7,7 @@ from config.ModelConfig import ModelConfig
 def load_config():
     # 读取相对路径
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    config_path = os.path.join(base_dir, '../../resource/config.yml')
+    config_path = os.path.join(base_dir, '../../config/application.yml')
 
     # 文件存在判断
     if not os.path.exists(config_path):

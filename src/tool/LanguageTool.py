@@ -14,7 +14,7 @@ LANG_CODE_MAP = {
 REVERSE_LANG_CODE_MAP = {v: k for k, v in LANG_CODE_MAP.items()}
 
 
-# 检测语法
+# 语言检测
 def detect_lang(text: str):
     try:
         detected = detect(text)

@@ -12,12 +12,11 @@ router = APIRouter()
 @router.post("/translate")
 def translate(req: RequestDTO) -> ResponseDTO:
     sourceText = req.text
-    # 语言类型转化
-    targetType = convert_type(req.targetType)
     # 检测输入语言
     sourceType = detect_lang(sourceText)
 
-    # 类型合法校验
+    # 语言类型转化校验
+    targetType = convert_type(req.targetType)
     if not targetType or targetType not in tokenizer.lang_code_to_id:
         raise HTTPException(status_code = 400, detail = f"Unsupported target language: {targetType}")
 
