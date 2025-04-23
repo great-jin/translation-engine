@@ -1,8 +1,7 @@
 from langdetect import detect
 
 LANG_CODE_MAP = {
-    'zh-cn': 'zho_Hans',
-    'zh-tw': 'zho_Hant',
+    'zh': 'zho_Hans',
     'en': 'eng_Latn',
     'fr': 'fra_Latn',
     'de': 'deu_Latn',
