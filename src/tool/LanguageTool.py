@@ -17,6 +17,9 @@ REVERSE_LANG_CODE_MAP = {v: k for k, v in LANG_CODE_MAP.items()}
 def detect_lang(text: str):
     try:
         detected = detect(text)
+        if detected == "zh-cn" or detected =="zh-tw":
+            detected = "zh"
+
         # 类型映射
         return LANG_CODE_MAP.get(detected, 'eng_Latn')
     except Exception:
