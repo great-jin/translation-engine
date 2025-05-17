@@ -8,7 +8,6 @@ sentencepiece==0.1.99
 
 protobuf==3.20.3
 
-# 实体类
 pydantic==1.10.13
 
 PyYAML~=6.0.2
