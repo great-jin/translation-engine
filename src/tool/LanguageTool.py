@@ -2,12 +2,14 @@ from langdetect import detect
 
 LANG_CODE_MAP = {
     'zh': 'zho_Hans',
+    'zh-tw': 'zho_Hant',
     'en': 'eng_Latn',
     'fr': 'fra_Latn',
     'de': 'deu_Latn',
     'ja': 'jpn_Jpan',
     'ko': 'kor_Hang',
-    'es': 'spa_Latn'
+    'es': 'spa_Latn',
+    'vi': 'vie_Latn'
 }
 
 REVERSE_LANG_CODE_MAP = {v: k for k, v in LANG_CODE_MAP.items()}
@@ -17,7 +19,8 @@ REVERSE_LANG_CODE_MAP = {v: k for k, v in LANG_CODE_MAP.items()}
 def detect_lang(text: str):
     try:
         detected = detect(text)
-        if detected == "zh-cn" or detected =="zh-tw":
+        # zh-cn
+        if detected == "zh-cn":
             detected = "zh"
 
         # 类型映射
