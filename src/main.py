@@ -11,8 +11,8 @@ app = FastAPI(
     version = app_config.version
 )
 
-# 挂在接口
-app.include_router(translate_router)
+# 挂载接口
+app.include_router(translate_router, prefix = "/api/nllb")
 
 # 启动服务
 if __name__ == "__main__":

@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 # 文本翻译
-@router.post("/nllb/translate")
+@router.post("/translate")
 def translate(req: RequestDTO) -> ResponseDTO:
     # 格式校验
     msg = RequestDTO.validate_req(req)
@@ -36,7 +36,7 @@ def translate(req: RequestDTO) -> ResponseDTO:
                 **inputs,
                 forced_bos_token_id = tokenizer.convert_tokens_to_ids(target_type),
                 # 限制生成时的最大 token 数量
-                max_length = 1024
+                max_length = 512
             )
         # 解码输出
         result = tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
@@ -49,7 +49,7 @@ def translate(req: RequestDTO) -> ResponseDTO:
 
 
 # 批量翻译
-@router.post("/nllb/translate/batch", response_model = List[ResponseDTO])
+@router.post("/translate/batch", response_model = List[ResponseDTO])
 def batch_translate(batch_req: BatchRequestDTO) -> List[ResponseDTO]:
     # 数量校验
     req_list = batch_req.requests
