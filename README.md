@@ -18,9 +18,15 @@ Visit the website of [nllb-200-distilled-600M](https://huggingface.co/facebook/n
 - tokenizer.json
 - tokenizer_config.json
 
-After model is installed, update the `config/application.yml` file.
+After model is installed, rewrite model to ct2, optional: `int8`, `int16`, `float16`, `float32`.
+```bash
+ct2-transformers-converter \
+    --model <path_to_nllb_file> \
+    --output_dir <output_dir> \
+    --quantization int8
+```
 
-Change `model.path` value to the model file location.
+After model is converted, then update the `config/application.yml` file.
 
 Then execute the following command to install required package, and you free to go.
 ```bash

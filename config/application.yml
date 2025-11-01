@@ -6,4 +6,5 @@ app:
   port: 8080
 
 model:
-  path: "D:/Workspace/Model/facebook"
+  nllbPath: "D:/Workspace/Model/nllb"
+  ct2Path: "D:/Workspace/Model/nllb_ct2"

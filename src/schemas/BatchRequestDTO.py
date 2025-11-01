@@ -1,5 +1,8 @@
-from pydantic import BaseModel, conlist
-from schemas.RequestDTO import RequestDTO
+from typing import Optional
+from pydantic import BaseModel
 
 class BatchRequestDTO(BaseModel):
-    requests: conlist(RequestDTO)
+    quality: Optional[int] = None
+    sourceType: Optional[str] = None
+    targetType: str
+    textList: list[str]

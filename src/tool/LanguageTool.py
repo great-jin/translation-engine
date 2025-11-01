@@ -34,10 +34,3 @@ def convert_type(lang_type: str) -> str:
         return LANG_CODE_MAP[lang_type.lower()]
     except KeyError:
         raise ValueError(f"Unsupported language type: {lang_type}")
-
-# 类型反转
-def reverse_type(code: str) -> str:
-    try:
-        return REVERSE_LANG_CODE_MAP[code]
-    except KeyError:
-        raise ValueError(f"Unsupported language code: {code}")

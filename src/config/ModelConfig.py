@@ -2,7 +2,5 @@ from dataclasses import dataclass
 
 @dataclass
 class ModelConfig:
-    path: str
-
-
-
+    nllbPath: str
+    ct2Path: str
