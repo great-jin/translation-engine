@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter
+import pysbd
 
 from schemas.RequestDTO import RequestDTO
 from schemas.ResponseDTO import ResponseDTO
@@ -15,22 +16,24 @@ router = APIRouter()
 def translate(req: RequestDTO) -> ResponseDTO:
     try:
         text = req.text
-        src_lang = detect_lang(req.text)
-        tgt_lang = convert_type(req.targetType)
 
-        # 内容翻译
-        tokens = [src_lang] + tokenizer.convert_ids_to_tokens(tokenizer.encode(text)) + ["</s>"]
-        results = translator.translate_batch(
-            [tokens],
-            target_prefix = [[tgt_lang]]
+        # 文本分割
+        seg = pysbd.Segmenter(language = "en", clean = False)
+        sentences = seg.segment(text)
+
+        # 批量翻译
+        batch_req = BatchRequestDTO(
+            quality = req.quality,
+            targetType = req.targetType,
+            textList = sentences
         )
-        output_tokens = results[0].hypotheses[0]
+        results = batch_translate(batch_req)
 
-        # 解码
-        if output_tokens and output_tokens[0] == tgt_lang:
-            output_tokens = output_tokens[1:]
-        output_text = tokenizer.decode(tokenizer.convert_tokens_to_ids(output_tokens))
-        return ResponseDTO.res_success(text, output_text)
+        # 回拼结果
+        result_text = ""
+        for line in results:
+            result_text += line.targetText + " "
+        return ResponseDTO.res_success(text, result_text)
     except Exception as e:
         print(f"Translate fail: {str(req)}, error: {e}")
         return ResponseDTO.res_fail(str(e), "")
@@ -41,7 +44,7 @@ def batch_translate(req: BatchRequestDTO) -> List[ResponseDTO]:
     try:
         sentences = req.textList
         batch_tokens = [
-            [detect_lang(s)] + tokenizer.convert_ids_to_tokens(tokenizer.encode(s)) + ["</s>"]
+            [detect_lang(s)] + tokenizer.convert_ids_to_tokens(tokenizer.encode(s, truncation=False)) + ["</s>"]
             for s in sentences
         ]
 

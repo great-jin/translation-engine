@@ -1,7 +1,9 @@
+from typing import Optional
 from pydantic import BaseModel
 from tool.LanguageTool import LANG_CODE_MAP
 
 class RequestDTO(BaseModel):
+    quality: Optional[int] = None
     text: str
     targetType: str
 
