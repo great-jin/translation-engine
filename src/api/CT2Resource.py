@@ -17,6 +17,12 @@ def translate(req: RequestDTO) -> ResponseDTO:
     try:
         text = req.text
 
+        # 语言一致返回
+        source_type = detect_lang(text)
+        target_type = convert_type(req.targetType)
+        if source_type == target_type:
+            return ResponseDTO.res_origin(text)
+
         # 文本分割
         seg = pysbd.Segmenter(language = "en", clean = False)
         sentences = seg.segment(text)
