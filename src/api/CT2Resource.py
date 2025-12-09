@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import APIRouter
+from autocorrect import Speller
 import pysbd
 
 from schemas.RequestDTO import RequestDTO
@@ -10,6 +11,9 @@ from tool.ModelTool import tokenizer, translator
 
 # 导出接口
 router = APIRouter()
+
+# 拼写校正
+spell = Speller()
 
 # 文本翻译
 @router.post("/translate", response_model=ResponseDTO)
@@ -48,11 +52,14 @@ def translate(req: RequestDTO) -> ResponseDTO:
 @router.post("/translate/batch", response_model = List[ResponseDTO])
 def batch_translate(req: BatchRequestDTO) -> List[ResponseDTO]:
     try:
+        batch_tokens = []
         sentences = req.textList
-        batch_tokens = [
-            [detect_lang(s)] + tokenizer.convert_ids_to_tokens(tokenizer.encode(s, truncation=False)) + ["</s>"]
-            for s in sentences
-        ]
+        for s in sentences:
+            # 校正并构建
+            text = spell(s)
+            prefix = detect_lang(text)
+            content = tokenizer.convert_ids_to_tokens(tokenizer.encode(text, truncation=False))
+            batch_tokens.append([prefix] + content + ["</s>"])
 
         # 翻译质量
         beam_size = req.quality
