@@ -39,19 +39,9 @@ ct2-transformers-converter \
 
 After model is converted, then update the `config/application.yml` file.
 
-Then execute the following command to install required package, and you free to go.
+Then execute the following command to install required package, and bash shell is under `bin/` directory.
 ```bash
 pip install -r requirements.txt
-```
-
-Start and stop the background service using the following commands.
-```bash
-# star server
-nohup /usr/local/python311/bin/uvicorn main:app --host 0.0.0.0 --port 8080 > uvicorn.log 2>&1 &
-
-# stop server
-ps aux | grep uvicorn
-kill -9 <PID>
 ```
 
 **Notice:** If you want to deploy to a server, make sure the machine memory is great then `4G` to load nllb model.

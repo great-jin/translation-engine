@@ -1,10 +1,10 @@
 app:
   name: Daily Word
   description: Word Translation
-  version: 1.0.0
-  host: 127.0.0.1
+  version: 1.0
+  host: 0.0.0.0
   port: 8080
 
 model:
-  nllbPath: "D:/Workspace/Model/nllb"
-  ct2Path: "D:/Workspace/Model/nllb_ct2"
+  nllbPath: "D:/Workspace/Model/nllb_600m"
+  ct2Path: "D:/Workspace/Model/nllb_600m_ct2"
